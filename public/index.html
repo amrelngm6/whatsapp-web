@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WhatsApp Web Chat</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="/socket.io/socket.io.js"></script>
+</head>
+<body>
+    <!-- QR Code Modal -->
+    <div id="qrModal" class="modal">
+        <div class="modal-content">
+            <div class="qr-container">
+                <h2>Scan QR Code</h2>
+                <p class="qr-subtitle">Open WhatsApp on your phone and scan this code</p>
+                <div id="qrCode" class="qr-code-box">
+                    <div class="loader"></div>
+                </div>
+                <div class="qr-instructions">
+                    <div class="instruction-step">
+                        <span class="step-number">1</span>
+                        <span>Open WhatsApp on your phone</span>
+                    </div>
+                    <div class="instruction-step">
+                        <span class="step-number">2</span>
+                        <span>Tap Menu or Settings and select Linked Devices</span>
+                    </div>
+                    <div class="instruction-step">
+                        <span class="step-number">3</span>
+                        <span>Tap on Link a Device</span>
+                    </div>
+                    <div class="instruction-step">
+                        <span class="step-number">4</span>
+                        <span>Point your phone at this screen to capture the QR code</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Container -->
+    <div id="app" class="app-container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <!-- Header -->
+            <div class="sidebar-header">
+                <div class="user-info">
+                    <div class="user-avatar">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <span class="user-name" id="userName">WhatsApp Web</span>
+                </div>
+                <div class="header-actions">
+                    <button class="icon-button" title="New Chat">
+                        <i class="fas fa-message"></i>
+                    </button>
+                    <button class="icon-button" title="Menu" id="menuBtn">
+                        <i class="fas fa-ellipsis-vertical"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Search Bar -->
+            <div class="search-container">
+                <div class="search-box">
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="searchInput" placeholder="Search or start new chat">
+                </div>
+            </div>
+
+            <!-- Status Banner -->
+            <div id="statusBanner" class="status-banner">
+                <i class="fas fa-circle-notch fa-spin"></i>
+                <span id="statusText">Connecting...</span>
+            </div>
+
+            <!-- Chat List -->
+            <div class="chat-list" id="chatList">
+                <!-- Chats will be loaded here -->
+            </div>
+        </div>
+
+        <!-- Chat Area -->
+        <div class="chat-area">
+            <!-- Welcome Screen -->
+            <div id="welcomeScreen" class="welcome-screen">
+                <div class="welcome-content">
+                    <div class="welcome-icon">
+                        <i class="fab fa-whatsapp"></i>
+                    </div>
+                    <h1>WhatsApp Web</h1>
+                    <p>Send and receive messages without keeping your phone online.</p>
+                    <p class="welcome-subtitle">Select a chat to start messaging</p>
+                </div>
+            </div>
+
+            <!-- Chat Container -->
+            <div id="chatContainer" class="chat-container" style="display: none;">
+                <!-- Chat Header -->
+                <div class="chat-header">
+                    <div class="chat-header-info">
+                        <div class="chat-avatar">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <div class="chat-details">
+                            <h3 id="chatName">Chat Name</h3>
+                            <p id="chatStatus">online</p>
+                        </div>
+                    </div>
+                    <div class="chat-header-actions">
+                        <button class="icon-button" title="Search">
+                            <i class="fas fa-search"></i>
+                        </button>
+                        <button class="icon-button" title="More">
+                            <i class="fas fa-ellipsis-vertical"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Messages Area -->
+                <div class="messages-area" id="messagesArea">
+                    <!-- Messages will be loaded here -->
+                </div>
+
+                <!-- Message Input -->
+                <div class="message-input-container">
+                    <button class="icon-button" title="Emoji">
+                        <i class="fas fa-face-smile"></i>
+                    </button>
+                    <button class="icon-button" title="Attach">
+                        <i class="fas fa-paperclip"></i>
+                    </button>
+                    <div class="message-input-wrapper">
+                        <input type="text" id="messageInput" placeholder="Type a message" autocomplete="off">
+                    </div>
+                    <button class="send-button" id="sendButton">
+                        <i class="fas fa-paper-plane"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Menu Dropdown -->
+    <div id="menuDropdown" class="dropdown-menu">
+        <a href="#" id="logoutBtn">
+            <i class="fas fa-right-from-bracket"></i>
+            Logout
+        </a>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>

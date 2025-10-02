@@ -1,0 +1,8 @@
+node_modules/
+.wwebjs_auth/
+.wwebjs_cache/
+sessions/
+*.log
+.env.local
+.DS_Store
+Thumbs.db

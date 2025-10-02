@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WhatsApp PHP API Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .dashboard {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 40px;
+        }
+        .header h1 {
+            font-size: 36px;
+            margin-bottom: 10px;
+        }
+        .header p {
+            font-size: 18px;
+            opacity: 0.9;
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        .card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            transition: transform 0.3s;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+        }
+        .card h2 {
+            color: #667eea;
+            margin-bottom: 15px;
+            font-size: 22px;
+        }
+        .card p {
+            color: #666;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+        .btn {
+            display: inline-block;
+            padding: 12px 25px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: bold;
+            cursor: pointer;
+            border: none;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+        .btn-primary {
+            background: #25d366;
+            color: white;
+        }
+        .btn-primary:hover {
+            background: #128c7e;
+        }
+        .btn-secondary {
+            background: #667eea;
+            color: white;
+        }
+        .btn-secondary:hover {
+            background: #5568d3;
+        }
+        .btn-info {
+            background: #17a2b8;
+            color: white;
+        }
+        .btn-info:hover {
+            background: #138496;
+        }
+        .btn-danger {
+            background: #dc3545;
+            color: white;
+        }
+        .btn-danger:hover {
+            background: #c82333;
+        }
+        .status-box {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 15px;
+        }
+        .status-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid #e9ecef;
+        }
+        .status-item:last-child {
+            border-bottom: none;
+        }
+        .status-label {
+            font-weight: bold;
+            color: #495057;
+        }
+        .status-value {
+            color: #28a745;
+            font-weight: bold;
+        }
+        .quick-links {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        .quick-links h2 {
+            color: #667eea;
+            margin-bottom: 20px;
+        }
+        .link-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+        .icon {
+            font-size: 48px;
+            margin-bottom: 15px;
+        }
+        .response-box {
+            background: #f1f3f5;
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 15px;
+            display: none;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 20px;
+        }
+        .spinner {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #667eea;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard">
+        <div class="header">
+            <div class="icon">💬</div>
+            <h1>WhatsApp PHP API Dashboard</h1>
+            <p>Manage and test your PHP-powered WhatsApp chat application</p>
+        </div>
+
+        <div class="grid">
+            <!-- Initialize Data Card -->
+            <div class="card">
+                <h2>🚀 Initialize Demo Data</h2>
+                <p>Create sample chats and messages to get started quickly.</p>
+                <button class="btn btn-primary" onclick="initDemoData()">Initialize Now</button>
+                <div id="init-loading" class="loading">
+                    <div class="spinner"></div>
+                    <p>Initializing...</p>
+                </div>
+                <div id="init-response" class="response-box"></div>
+            </div>
+
+            <!-- Open Chat App Card -->
+            <div class="card">
+                <h2>💬 Open Chat App</h2>
+                <p>Launch the main WhatsApp chat interface.</p>
+                <a href="public/index.html" target="_blank" class="btn btn-secondary">Open Chat</a>
+            </div>
+
+            <!-- Test Message Sender Card -->
+            <div class="card">
+                <h2>📱 Test Message Sender</h2>
+                <p>Simulate receiving messages from other users.</p>
+                <a href="public/test_sender.html" target="_blank" class="btn btn-info">Open Tester</a>
+            </div>
+
+            <!-- Check Status Card -->
+            <div class="card">
+                <h2>📊 System Status</h2>
+                <p>View current system status and information.</p>
+                <button class="btn btn-secondary" onclick="checkStatus()">Check Status</button>
+                <div id="status-loading" class="loading">
+                    <div class="spinner"></div>
+                </div>
+                <div id="status-response" class="status-box" style="display: none;">
+                    <div class="status-item">
+                        <span class="status-label">Status:</span>
+                        <span class="status-value" id="status-ready">-</span>
+                    </div>
+                    <div class="status-item">
+                        <span class="status-label">User:</span>
+                        <span class="status-value" id="status-user">-</span>
+                    </div>
+                    <div class="status-item">
+                        <span class="status-label">Platform:</span>
+                        <span class="status-value" id="status-platform">-</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- View Chats Card -->
+            <div class="card">
+                <h2>💾 View Data</h2>
+                <p>Inspect your data with a beautiful viewer.</p>
+                <a href="data_viewer.html" target="_blank" class="btn btn-info">Open Data Viewer</a>
+                <a href="api/chats.json" target="_blank" class="btn btn-secondary" style="margin-top: 10px; display: inline-block;">Raw JSON</a>
+            </div>
+
+            <!-- Clear Data Card -->
+            <div class="card">
+                <h2>🗑️ Clear Data</h2>
+                <p>Reset all chats and messages (careful!).</p>
+                <button class="btn btn-danger" onclick="clearData()">Clear All Data</button>
+                <div id="clear-response" class="response-box"></div>
+            </div>
+        </div>
+
+        <!-- Quick Links -->
+        <div class="quick-links">
+            <h2>📚 Documentation & Resources</h2>
+            <div class="link-grid">
+                <a href="verify_setup.html" target="_blank" class="btn btn-primary">🔍 Verify Setup</a>
+                <a href="README_PHP.md" target="_blank" class="btn btn-secondary">📖 Full Documentation</a>
+                <a href="QUICKSTART.md" target="_blank" class="btn btn-secondary">⚡ Quick Start Guide</a>
+                <a href="CONVERSION_SUMMARY.md" target="_blank" class="btn btn-secondary">📝 What Changed</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        async function initDemoData() {
+            const loadingEl = document.getElementById('init-loading');
+            const responseEl = document.getElementById('init-response');
+            
+            loadingEl.style.display = 'block';
+            responseEl.style.display = 'none';
+            
+            try {
+                const response = await fetch('api/init_demo_data.php');
+                const data = await response.json();
+                
+                loadingEl.style.display = 'none';
+                responseEl.style.display = 'block';
+                responseEl.innerHTML = `
+                    <strong>✅ Success!</strong><br>
+                    ${data.message}<br>
+                    Chats created: ${data.chats}<br>
+                    Messages created: ${data.messages}
+                `;
+                responseEl.style.background = '#d4edda';
+                responseEl.style.color = '#155724';
+            } catch (error) {
+                loadingEl.style.display = 'none';
+                responseEl.style.display = 'block';
+                responseEl.textContent = '❌ Error: ' + error.message;
+                responseEl.style.background = '#f8d7da';
+                responseEl.style.color = '#721c24';
+            }
+        }
+
+        async function checkStatus() {
+            const loadingEl = document.getElementById('status-loading');
+            const responseEl = document.getElementById('status-response');
+            
+            loadingEl.style.display = 'block';
+            responseEl.style.display = 'none';
+            
+            try {
+                const response = await fetch('api/get_status.php');
+                const data = await response.json();
+                
+                loadingEl.style.display = 'none';
+                responseEl.style.display = 'block';
+                
+                document.getElementById('status-ready').textContent = data.isReady ? '✅ Ready' : '❌ Not Ready';
+                document.getElementById('status-user').textContent = data.clientInfo.pushname;
+                document.getElementById('status-platform').textContent = data.clientInfo.platform;
+            } catch (error) {
+                loadingEl.style.display = 'none';
+                alert('❌ Error: ' + error.message);
+            }
+        }
+
+        async function clearData() {
+            if (!confirm('Are you sure you want to clear all data? This cannot be undone!')) {
+                return;
+            }
+            
+            const responseEl = document.getElementById('clear-response');
+            
+            try {
+                const response = await fetch('api/clear_data.php');
+                const data = await response.json();
+                
+                responseEl.style.display = 'block';
+                responseEl.innerHTML = `<strong>✅ ${data.message}</strong><br>Run "Initialize Demo Data" to add sample data again.`;
+                responseEl.style.background = '#d4edda';
+                responseEl.style.color = '#155724';
+            } catch (error) {
+                responseEl.style.display = 'block';
+                responseEl.textContent = '❌ Error: ' + error.message;
+                responseEl.style.background = '#f8d7da';
+                responseEl.style.color = '#721c24';
+            }
+        }
+
+        // Auto-check status on load
+        window.addEventListener('load', () => {
+            setTimeout(checkStatus, 500);
+        });
+    </script>
+</body>
+</html>

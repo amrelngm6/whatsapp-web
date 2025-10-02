@@ -1,0 +1,14 @@
+# Enable rewrite engine
+RewriteEngine On
+
+# Allow CORS headers
+Header always set Access-Control-Allow-Origin "*"
+Header always set Access-Control-Allow-Methods "GET, POST, PUT, DELETE, OPTIONS"
+Header always set Access-Control-Allow-Headers "Content-Type, Authorization"
+
+# Set default charset
+AddDefaultCharset UTF-8
+
+# Enable PHP error display (disable in production)
+php_flag display_errors On
+php_value error_reporting E_ALL
