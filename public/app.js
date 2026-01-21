@@ -446,6 +446,18 @@ class WhatsAppClient {
                 </div>
             `;
         }
+        
+        if (media.mimetype && media.mimetype.startsWith('audio/')) {
+            return `
+                <div class="message-media message-audio">
+                    <audio controls>
+                        <source src="data:${media.mimetype};base64,${media.data}" type="${media.mimetype}">
+                        Your browser does not support the audio element.
+                    </audio>
+                </div>
+            `;
+        }
+        
         return '';
     }
     

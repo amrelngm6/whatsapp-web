@@ -11,30 +11,10 @@
 <body>
     <!-- QR Code Modal -->
     <div id="qrModal" class="modal">
-        <div class="modal-content">
+        <div class="modal-content" style="padding: 0 0;" id="modalContent">
             <div class="qr-container">
-                <h2>Scan QR Code</h2>
-                <p class="qr-subtitle">Open WhatsApp on your phone and scan this code</p>
-                <div id="qrCode" class="qr-code-box">
+                <div id="qrCode" class="qr-code-box mb-0">
                     <div class="loader"></div>
-                </div>
-                <div class="qr-instructions">
-                    <div class="instruction-step">
-                        <span class="step-number">1</span>
-                        <span>Open WhatsApp on your phone</span>
-                    </div>
-                    <div class="instruction-step">
-                        <span class="step-number">2</span>
-                        <span>Tap Menu or Settings and select Linked Devices</span>
-                    </div>
-                    <div class="instruction-step">
-                        <span class="step-number">3</span>
-                        <span>Tap on Link a Device</span>
-                    </div>
-                    <div class="instruction-step">
-                        <span class="step-number">4</span>
-                        <span>Point your phone at this screen to capture the QR code</span>
-                    </div>
                 </div>
             </div>
         </div>
@@ -152,5 +132,14 @@
     </div>
 
     <script src="app.js"></script>
+
+    <script>
+        
+        window.addEventListener("message", (e) => {
+            if (e.data.action === "scroll") {
+                document.getElementById("modalContent").scrollTo({ top: e.data.top, behavior: "smooth" });
+            }
+        });
+    </script>
 </body>
 </html>
